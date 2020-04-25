@@ -1,0 +1,30 @@
+{
+  "name": "express-app-template",
+  "version": "1.0.0",
+  "description": "A template for making an Express app.",
+  "homepage": "https://github.com/claudiorivera/express-app-template",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest",
+    "start": "pm2 start server.js --watch",
+    "dev": "nodemon server & browser-sync start --proxy 'localhost:3000' --files 'public'",
+    "stop": "pm2 stop server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/claudiorivera/express-app-template.git"
+  },
+  "keywords": [],
+  "author": "Claudio Rivera",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-favicon": "^2.0.1",
+    "express-github-webhook": "^1.0.6"
+  },
+  "devDependencies": {
+    "jest": "^25.4.0",
+    "nodemon": "^2.0.3"
+  }
+}
