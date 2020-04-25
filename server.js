@@ -15,7 +15,8 @@ const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_NAME = process.env.DB_NAME;
 
-const cn = {
+// Postgres config
+const dbConnectionConfig = {
   host: DB_HOST,
   port: DB_PORT,
   database: DB_NAME,
@@ -26,16 +27,15 @@ const cn = {
 
 const app = express();
 const webHookHandler = webhook({ path: "/webhook", secret: SECRET_TOKEN });
-// Postgres connection
-const db = pgp(cn);
+const db = pgp(dbConnectionConfig);
 
-// Instantiate middleware
+// Middleware
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 app.use(webHookHandler);
 
-// WebHooks
+// WebHooks handler
 webHookHandler.on("*", function (event, repo, data) {
   console.log("webHookHandler event: ", event);
   exec("git pull", (error, stdout, stderr) => {
@@ -51,8 +51,55 @@ webHookHandler.on("*", function (event, repo, data) {
   });
 });
 
+// Routes
 app.get("/tasks", (req, res) => {
-  res.sendStatus(200);
+  db.any("SELECT * FROM tasks")
+    .then((data) => {
+      res.status(200).json(data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
+app.post("/tasks", (req, res) => {
+  const { task_description } = req.body;
+
+  db.none("INSERT INTO tasks(task_description, task_status) VALUES($1, $2)", [
+    task_description,
+    false,
+  ])
+    .then(() => {
+      res.sendStatus(201);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
+app.put("/tasks/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const { task_status } = req.body;
+
+  db.query("UPDATE tasks SET task_status = $1 WHERE id = $2", [task_status, id])
+    .then(() => {
+      res.status(200).send(`User modified with ID: ${id}`);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
+app.delete("/tasks/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+
+  db.query("DELETE FROM tasks WHERE id = $1", id)
+    .then(() => {
+      res.status(200).send(`User deleted with ID: ${id}`);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 });
 
 // Start server
