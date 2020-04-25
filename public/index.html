@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>My App Template</title>
+    <title>To-Do List</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -13,9 +13,29 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+      integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lobster&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <h1>My App Template</h1>
+    <div class="jumbotron text-center m-0">
+      <h1 class="display-3" style="font-family: 'Lobster', cursive;">
+        To-Do List v1.0.0
+      </h1>
+      <h5>by Claudio Rivera</h5>
+      <div class="container">
+        <h4>TODO: INPUT FORM HERE</h4>
+      </div>
+
+      <div class="container" id="tasksDisplay"></div>
+    </div>
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
