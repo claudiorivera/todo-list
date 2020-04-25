@@ -4,13 +4,30 @@ const path = require("path");
 const webhook = require("express-github-webhook");
 require("dotenv").config();
 const { exec } = require("child_process");
+const pgp = require("pg-promise")();
 
 // Environmental variables
-const PORT = process.env.PORT || 3000;
+const SERVER_PORT = process.env.SERVER_PORT || 3000;
 const SECRET_TOKEN = process.env.SECRET_TOKEN;
+const DB_HOST = process.env.DB_HOST;
+const DB_PORT = process.env.DB_PORT;
+const DB_USER = process.env.DB_USER;
+const DB_PASSWORD = process.env.DB_PASSWORD;
+const DB_NAME = process.env.DB_NAME;
+
+const cn = {
+  host: DB_HOST,
+  port: DB_PORT,
+  database: DB_NAME,
+  user: DB_USER,
+  password: DB_PASSWORD,
+  max: 30, // use up to 30 connections
+};
 
 const app = express();
 const webHookHandler = webhook({ path: "/webhook", secret: SECRET_TOKEN });
+// Postgres connection
+const db = pgp(cn);
 
 // Instantiate middleware
 app.use(express.json());
@@ -39,6 +56,6 @@ app.get("/tasks", (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`Server started listening on port ${PORT}`);
+app.listen(SERVER_PORT, () => {
+  console.log(`Server started listening on port ${SERVER_PORT}`);
 });
