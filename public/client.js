@@ -79,8 +79,6 @@ function toggleComplete(clickEvent) {
   const data = clickEvent.currentTarget.dataset;
   if (data.iscomplete === "true") {
     const message = { task_iscomplete: "false" };
-    // PUT - /tasks/:id - message task_iscomplete = false, and refresh
-    // Send message and then refresh
     fetch(`/tasks/${Number(data.id)}`, {
       method: "PUT",
       headers: {
@@ -96,9 +94,6 @@ function toggleComplete(clickEvent) {
       });
   } else {
     const message = { task_iscomplete: "true" };
-
-    // PUT - /tasks/:id - message task_iscomplete = false, and refresh
-    // Send message and then refresh
     fetch(`/tasks/${Number(data.id)}`, {
       method: "PUT",
       headers: {
