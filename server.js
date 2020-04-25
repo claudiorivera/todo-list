@@ -5,10 +5,6 @@ const webhook = require("express-github-webhook");
 require("dotenv").config();
 const { exec } = require("child_process");
 
-// Postgres connection
-const pgp = require("pg-promise");
-// const db = pgp(`postgresql://claudio@localhost/todo-list`);
-
 // Environmental variables
 const PORT = process.env.PORT || 3000;
 const SECRET_TOKEN = process.env.SECRET_TOKEN;
@@ -39,16 +35,7 @@ webHookHandler.on("*", function (event, repo, data) {
 });
 
 app.get("/tasks", (req, res) => {
-  // db.any("SELECT * FROM tasks WHERE task-status = $1", [false])
-  //   .then(function (data) {
-  //     // success;
-  //     console.log(data);
-  //   })
-  //   .catch(function (error) {
-  //     // error;
-  //     console.log(error);
-  //   });
-  res.send(200);
+  res.sendStatus(200);
 });
 
 // Start server
