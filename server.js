@@ -65,7 +65,7 @@ app.get("/tasks", (req, res) => {
 app.post("/tasks", (req, res) => {
   const { task_description } = req.body;
 
-  db.none("INSERT INTO tasks(task_description, task_status) VALUES($1, $2)", [
+  db.none("INSERT INTO tasks(task_description, task_complete) VALUES($1, $2)", [
     task_description,
     false,
   ])
@@ -79,9 +79,12 @@ app.post("/tasks", (req, res) => {
 
 app.put("/tasks/:id", (req, res) => {
   const id = parseInt(req.params.id);
-  const { task_status } = req.body;
+  const { task_complete } = req.body;
 
-  db.query("UPDATE tasks SET task_status = $1 WHERE id = $2", [task_status, id])
+  db.query("UPDATE tasks SET task_complete = $1 WHERE id = $2", [
+    task_complete,
+    id,
+  ])
     .then(() => {
       res.status(200).send(`User modified with ID: ${id}`);
     })
