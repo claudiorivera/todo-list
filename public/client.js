@@ -1,10 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
+  document.querySelector("#buttonSubmit").addEventListener("click", submitTask);
   refreshList();
 });
 
 function refreshList() {
-  // Target list container
+  // Target list container and empty it
   const tasksListContainer = document.querySelector("#tasksDisplay");
+  while (tasksListContainer.firstChild) {
+    tasksListContainer.removeChild(tasksListContainer.lastChild);
+  }
 
   // Get data from server
   fetch("/tasks")
@@ -20,34 +24,93 @@ function refreshList() {
         // Create LI item
         const li = document.createElement("li");
         li.classList.add("list-group-item");
+        li.setAttribute("data-id", task.id);
 
         // Create text node
         let text = document.createTextNode(`${task.task_description}`);
 
         // Strike through if the task is complete
-        if (task.task_complete) {
+        if (task.task_iscomplete) {
           // Add the data-complete: true attribute
-          li.setAttribute("data-complete", true);
+          li.setAttribute("data-iscomplete", true);
           const strikeText = document.createElement("s");
           strikeText.appendChild(text);
           // Append text node to LI
           li.appendChild(strikeText);
         } else {
-          li.setAttribute("data-complete", false);
+          li.setAttribute("data-iscomplete", false);
           li.appendChild(text);
         }
 
-        // Event listener
-        li.addEventListener("click", toggleComplete);
-
         // Append LI to UL
         ul.appendChild(li);
+        // console.dir(li.dataset);
+
+        li.addEventListener("click", toggleComplete);
       });
       // Append UL to taskListContainer
       tasksListContainer.appendChild(ul);
     });
 }
 
+function submitTask() {
+  const task_description = document.querySelector("#inputText").value;
+  const message = {
+    task_description: `${task_description}`,
+  };
+
+  // Send message and then refresh
+  fetch("/tasks", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(message),
+  })
+    .then(() => {
+      refreshList();
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
 function toggleComplete(clickEvent) {
-  console.log(clickEvent.target.dataset);
+  const data = clickEvent.currentTarget.dataset;
+  if (data.iscomplete === "true") {
+    const message = { task_iscomplete: "false" };
+    // PUT - /tasks/:id - message task_iscomplete = false, and refresh
+    // Send message and then refresh
+    fetch(`/tasks/${Number(data.id)}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message),
+    })
+      .then(() => {
+        refreshList();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  } else {
+    const message = { task_iscomplete: "true" };
+
+    // PUT - /tasks/:id - message task_iscomplete = false, and refresh
+    // Send message and then refresh
+    fetch(`/tasks/${Number(data.id)}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message),
+    })
+      .then(() => {
+        refreshList();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 }

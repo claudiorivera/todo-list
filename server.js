@@ -65,10 +65,10 @@ app.get("/tasks", (req, res) => {
 app.post("/tasks", (req, res) => {
   const { task_description } = req.body;
 
-  db.none("INSERT INTO tasks(task_description, task_complete) VALUES($1, $2)", [
-    task_description,
-    false,
-  ])
+  db.none(
+    "INSERT INTO tasks(task_description, task_iscomplete) VALUES($1, $2)",
+    [task_description, false]
+  )
     .then(() => {
       res.sendStatus(201);
     })
@@ -79,10 +79,10 @@ app.post("/tasks", (req, res) => {
 
 app.put("/tasks/:id", (req, res) => {
   const id = parseInt(req.params.id);
-  const { task_complete } = req.body;
+  const { task_iscomplete } = req.body;
 
-  db.query("UPDATE tasks SET task_complete = $1 WHERE id = $2", [
-    task_complete,
+  db.query("UPDATE tasks SET task_iscomplete = $1 WHERE id = $2", [
+    task_iscomplete,
     id,
   ])
     .then(() => {
