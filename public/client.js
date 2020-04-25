@@ -17,30 +17,37 @@ function refreshList() {
       ul.classList.add("list-group");
 
       tasks.forEach((task) => {
-        // Create LI items
+        // Create LI item
         const li = document.createElement("li");
         li.classList.add("list-group-item");
 
+        // Create text node
+        let text = document.createTextNode(`${task.task_description}`);
+
+        // Strike through if the task is complete
         if (task.task_complete) {
-          // Create text node with strikethrough
+          // Add the data-complete: true attribute
+          li.setAttribute("data-complete", true);
           const strikeText = document.createElement("s");
-          const text = document.createTextNode(`${task.task_description}`);
           strikeText.appendChild(text);
           // Append text node to LI
           li.appendChild(strikeText);
-          // Attach event listener
         } else {
-          // Create text node without strikethrough
-          const text = document.createTextNode(`${task.task_description}`);
-          // Append text node to LI
+          li.setAttribute("data-complete", false);
           li.appendChild(text);
-          // Attach event listener
         }
+
+        // Event listener
+        li.addEventListener("click", toggleComplete);
+
         // Append LI to UL
         ul.appendChild(li);
       });
-
       // Append UL to taskListContainer
       tasksListContainer.appendChild(ul);
     });
+}
+
+function toggleComplete(clickEvent) {
+  console.log(clickEvent.target.dataset);
 }
