@@ -1,6 +1,6 @@
 {
   "name": "express-app-template",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A template for making an Express app.",
   "homepage": "https://github.com/claudiorivera/express-app-template",
   "main": "server.js",
