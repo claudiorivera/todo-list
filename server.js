@@ -74,20 +74,18 @@ app.post("/tasks", async (req, res) => {
   }
 });
 
-app.put("/tasks/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-  const { task_iscomplete } = req.body;
-
-  db.query("UPDATE tasks SET task_iscomplete = $1 WHERE id = $2", [
-    task_iscomplete,
-    id,
-  ])
-    .then(() => {
-      res.status(200).send(`User modified with ID: ${id}`);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+app.put("/tasks/:id", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const { task_iscomplete } = req.body;
+    const data = await db.query(
+      "UPDATE tasks SET task_iscomplete = $1 WHERE id = $2",
+      [task_iscomplete, id]
+    );
+    res.status(200).send(`User modified with ID: ${id}`);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.delete("/tasks/:id", (req, res) => {
