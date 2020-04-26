@@ -61,19 +61,17 @@ app.get("/tasks", async (req, res) => {
   }
 });
 
-app.post("/tasks", (req, res) => {
-  const { task_description } = req.body;
-
-  db.none(
-    "INSERT INTO tasks(task_description, task_iscomplete) VALUES($1, $2)",
-    [task_description, false]
-  )
-    .then(() => {
-      res.sendStatus(201);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+app.post("/tasks", async (req, res) => {
+  try {
+    const { task_description } = req.body;
+    const data = await db.none(
+      "INSERT INTO tasks(task_description, task_iscomplete) VALUES($1, $2)",
+      [task_description, false]
+    );
+    res.sendStatus(201);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.put("/tasks/:id", (req, res) => {
