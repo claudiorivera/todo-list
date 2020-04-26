@@ -12,6 +12,7 @@ const SECRET_TOKEN = process.env.SECRET_TOKEN;
 const DB_HOST = process.env.DB_HOST;
 const DB_PORT = process.env.DB_PORT;
 const DB_USER = process.env.DB_USER;
+const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_NAME = process.env.DB_NAME;
 
 // Postgres config
@@ -20,6 +21,7 @@ const dbConnectionConfig = {
   port: DB_PORT,
   database: DB_NAME,
   user: DB_USER,
+  password: DB_PASSWORD,
   max: 30, // use up to 30 connections
 };
 
