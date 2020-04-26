@@ -52,14 +52,13 @@ webHookHandler.on("*", function (event, repo, data) {
 });
 
 // Routes
-app.get("/tasks", (req, res) => {
-  db.any("SELECT * FROM tasks ORDER BY id ASC")
-    .then((data) => {
-      res.status(200).json(data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+app.get("/tasks", async (req, res) => {
+  try {
+    const data = await db.any("SELECT * FROM tasks ORDER BY id ASC");
+    res.status(200).json(data);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.post("/tasks", (req, res) => {

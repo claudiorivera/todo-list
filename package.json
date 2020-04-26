@@ -1,6 +1,6 @@
 {
   "name": "todo-list",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "A simple todo-list, made for a homework assignment.",
   "homepage": "https://github.com/claudiorivera/express-app-template",
   "main": "server.js",
