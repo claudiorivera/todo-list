@@ -53,7 +53,7 @@ webHookHandler.on("*", function (event, repo, data) {
 
 // Routes
 app.get("/tasks", (req, res) => {
-  db.any("SELECT * FROM tasks")
+  db.any("SELECT * FROM tasks ORDER BY id ASC")
     .then((data) => {
       res.status(200).json(data);
     })
