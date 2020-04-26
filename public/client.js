@@ -68,6 +68,7 @@ function submitTask() {
     body: JSON.stringify(message),
   })
     .then(() => {
+      document.querySelector("#inputText").value = "";
       refreshList();
     })
     .catch((error) => {
