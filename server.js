@@ -54,8 +54,8 @@ webHookHandler.on("*", function (event, repo, data) {
 // Routes
 app.get("/tasks", async (req, res) => {
   try {
-    const data = await db.any("SELECT * FROM tasks ORDER BY id ASC");
-    res.status(200).json(data);
+    const query = await db.any("SELECT * FROM tasks ORDER BY id ASC");
+    res.status(200).json(query);
   } catch (err) {
     console.log(err);
   }
@@ -64,7 +64,7 @@ app.get("/tasks", async (req, res) => {
 app.post("/tasks", async (req, res) => {
   try {
     const { task_description } = req.body;
-    const data = await db.none(
+    const query = await db.none(
       "INSERT INTO tasks(task_description, task_iscomplete) VALUES($1, $2)",
       [task_description, false]
     );
@@ -78,7 +78,7 @@ app.put("/tasks/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const { task_iscomplete } = req.body;
-    const data = await db.query(
+    const query = await db.query(
       "UPDATE tasks SET task_iscomplete = $1 WHERE id = $2",
       [task_iscomplete, id]
     );
@@ -88,16 +88,15 @@ app.put("/tasks/:id", async (req, res) => {
   }
 });
 
-app.delete("/tasks/:id", (req, res) => {
-  const id = parseInt(req.params.id);
+app.delete("/tasks/:id", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
 
-  db.query("DELETE FROM tasks WHERE id = $1", id)
-    .then(() => {
-      res.status(200).send(`User deleted with ID: ${id}`);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+    const query = await db.query("DELETE FROM tasks WHERE id = $1", id);
+    res.status(200).send(`User deleted with ID: ${id}`);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 // Start server
