@@ -6,9 +6,9 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "start": "pm2 start server.js --watch",
+    "start": "pm2 start server.js --watch --name todo-list",
     "dev": "nodemon server & browser-sync start --proxy 'localhost:3000' --files 'public'",
-    "stop": "pm2 stop server.js"
+    "stop": "pm2 stop todo-list"
   },
   "repository": {
     "type": "git",
