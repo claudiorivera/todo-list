@@ -78,37 +78,36 @@ async function submitTask() {
   }
 }
 
-function toggleComplete(clickEvent) {
+async function toggleComplete(clickEvent) {
   const data = clickEvent.currentTarget.dataset;
+
   if (data.iscomplete === "true") {
     const message = { task_iscomplete: "false" };
-    fetch(`/tasks/${Number(data.id)}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(message),
-    })
-      .then(() => {
-        refreshList();
-      })
-      .catch((error) => {
-        console.error(error);
+    try {
+      const response = await fetch(`/tasks/${Number(data.id)}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(message),
       });
+      refreshList();
+    } catch (err) {
+      console.log(err);
+    }
   } else {
     const message = { task_iscomplete: "true" };
-    fetch(`/tasks/${Number(data.id)}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(message),
-    })
-      .then(() => {
-        refreshList();
-      })
-      .catch((error) => {
-        console.error(error);
+    try {
+      const response = await fetch(`/tasks/${Number(data.id)}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(message),
       });
+      refreshList();
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
