@@ -3,54 +3,51 @@ document.addEventListener("DOMContentLoaded", () => {
   refreshList();
 });
 
-function refreshList() {
-  // Target list container and empty it
+async function refreshList() {
+  // Empty the list container
   const tasksListContainer = document.querySelector("#tasksDisplay");
   while (tasksListContainer.firstChild) {
     tasksListContainer.removeChild(tasksListContainer.lastChild);
   }
 
   // Get data from server
-  fetch("/tasks")
-    .then((response) => {
-      return response.json();
-    })
-    .then((tasks) => {
-      // Create UL list group
-      const ul = document.createElement("ul");
-      ul.classList.add("list-group");
+  const response = await fetch("/tasks");
+  const tasks = await response.json();
 
-      tasks.forEach((task) => {
-        // Create LI item
-        const li = document.createElement("li");
-        li.classList.add("list-group-item");
-        li.setAttribute("data-id", task.id);
+  // Create UL list group
+  const ul = document.createElement("ul");
+  ul.classList.add("list-group");
 
-        // Create text node
-        let text = document.createTextNode(`${task.task_description}`);
+  tasks.forEach(({ id, task_description, task_iscomplete }) => {
+    // Create LI item
+    const li = document.createElement("li");
+    li.classList.add("list-group-item");
+    li.setAttribute("data-id", id);
 
-        // Strike through if the task is complete
-        if (task.task_iscomplete) {
-          // Add the data-complete: true attribute
-          li.setAttribute("data-iscomplete", true);
-          const strikeText = document.createElement("s");
-          strikeText.appendChild(text);
-          // Append text node to LI
-          li.appendChild(strikeText);
-        } else {
-          li.setAttribute("data-iscomplete", false);
-          li.appendChild(text);
-        }
+    // Create text node
+    let text = document.createTextNode(`${task_description}`);
 
-        // Append LI to UL
-        ul.appendChild(li);
-        // console.dir(li.dataset);
+    // Strike through if the task is complete
+    if (task_iscomplete) {
+      // Add the data-complete: true attribute
+      li.setAttribute("data-iscomplete", true);
+      const strikeText = document.createElement("s");
+      strikeText.appendChild(text);
+      // Append text node to LI
+      li.appendChild(strikeText);
+    } else {
+      li.setAttribute("data-iscomplete", false);
+      li.appendChild(text);
+    }
 
-        li.addEventListener("click", toggleComplete);
-      });
-      // Append UL to taskListContainer
-      tasksListContainer.appendChild(ul);
-    });
+    // Append LI to UL
+    ul.appendChild(li);
+
+    // Click listener
+    li.addEventListener("click", toggleComplete);
+  });
+  // Append UL to taskListContainer
+  tasksListContainer.appendChild(ul);
 }
 
 function submitTask() {
