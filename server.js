@@ -1,13 +1,13 @@
+require("dotenv").config();
 const express = require("express");
 const favicon = require("express-favicon");
 const path = require("path");
 const webhook = require("express-github-webhook");
-require("dotenv").config();
 const { exec } = require("child_process");
 const pgp = require("pg-promise")();
 
 // Environmental variables
-const SERVER_PORT = process.env.SERVER_PORT || 3000;
+const SERVER_PORT = process.env.SERVER_PORT;
 const SECRET_TOKEN = process.env.SECRET_TOKEN;
 const DB_HOST = process.env.DB_HOST;
 const DB_PORT = process.env.DB_PORT;
