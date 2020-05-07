@@ -5,7 +5,7 @@ const path = require("path");
 const pgp = require("pg-promise")();
 
 // Environmental variables
-const SERVER_PORT = process.env.SERVER_PORT;
+const PORT = process.env.PORT;
 const DB_HOST = process.env.DB_HOST;
 const DB_PORT = process.env.DB_PORT;
 const DB_USER = process.env.DB_USER;
@@ -83,6 +83,6 @@ app.delete("/tasks/:id", async (req, res) => {
 });
 
 // Start server
-app.listen(SERVER_PORT, () => {
-  console.log(`Server started listening on port ${SERVER_PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server started listening on port ${PORT}`);
 });
