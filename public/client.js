@@ -12,7 +12,7 @@ async function refreshList() {
     }
 
     // Get data from server
-    const response = await fetch("/api");
+    const response = await fetch("/tasks");
     const tasks = await response.json();
 
     // Create UL list group
