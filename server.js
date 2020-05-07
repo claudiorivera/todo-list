@@ -2,13 +2,10 @@ require("dotenv").config();
 const express = require("express");
 const favicon = require("express-favicon");
 const path = require("path");
-const webhook = require("express-github-webhook");
-const { exec } = require("child_process");
 const pgp = require("pg-promise")();
 
 // Environmental variables
 const SERVER_PORT = process.env.SERVER_PORT;
-const SECRET_TOKEN = process.env.SECRET_TOKEN;
 const DB_HOST = process.env.DB_HOST;
 const DB_PORT = process.env.DB_PORT;
 const DB_USER = process.env.DB_USER;
@@ -25,33 +22,17 @@ const dbConnectionConfig = {
   max: 30, // use up to 30 connections
 };
 
+// Instantiate express and postgres
 const app = express();
-const webHookHandler = webhook({ path: "/webhook", secret: SECRET_TOKEN });
 const db = pgp(dbConnectionConfig);
 
 // Middleware
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
-app.use(webHookHandler);
-
-// WebHooks handler
-webHookHandler.on("*", function (event, repo, data) {
-  console.log("webHookHandler event: ", event);
-  exec("git pull", (error, stdout, stderr) => {
-    if (error) {
-      console.log(`error: ${error.message}`);
-      return;
-    }
-    if (stderr) {
-      console.log(`stderr: ${stderr}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
-  });
-});
 
 // Routes
+// GET /tasks - Get all tasks
 app.get("/tasks", async (req, res) => {
   try {
     const query = await db.any("SELECT * FROM tasks ORDER BY id ASC");
@@ -61,6 +42,7 @@ app.get("/tasks", async (req, res) => {
   }
 });
 
+// POST /tasks - Add a task
 app.post("/tasks", async (req, res) => {
   try {
     const { task_description } = req.body;
@@ -74,6 +56,7 @@ app.post("/tasks", async (req, res) => {
   }
 });
 
+// PUT /tasks/id - Mark a task completed
 app.put("/tasks/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -88,10 +71,10 @@ app.put("/tasks/:id", async (req, res) => {
   }
 });
 
+// DELETE /tasks/id - Delete a task
 app.delete("/tasks/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-
     const query = await db.query("DELETE FROM tasks WHERE id = $1", id);
     res.status(200).send(`User deleted with ID: ${id}`);
   } catch (err) {
