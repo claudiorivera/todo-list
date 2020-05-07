@@ -6,25 +6,27 @@ const pgp = require("pg-promise")();
 
 // Environmental variables
 const PORT = process.env.PORT;
-const DB_HOST = process.env.DB_HOST;
-const DB_PORT = process.env.DB_PORT;
-const DB_USER = process.env.DB_USER;
-const DB_PASSWORD = process.env.DB_PASSWORD;
-const DB_NAME = process.env.DB_NAME;
+// const DB_HOST = process.env.DB_HOST;
+// const DB_PORT = process.env.DB_PORT;
+// const DB_USER = process.env.DB_USER;
+// const DB_PASSWORD = process.env.DB_PASSWORD;
+// const DB_NAME = process.env.DB_NAME;
+const DB_URI = process.env.DB_URI;
 
 // Postgres config
-const dbConnectionConfig = {
-  host: DB_HOST,
-  port: DB_PORT,
-  database: DB_NAME,
-  user: DB_USER,
-  password: DB_PASSWORD,
-  max: 30, // use up to 30 connections
-};
+// const dbConnectionConfig = {
+//   host: DB_HOST,
+//   port: DB_PORT,
+//   database: DB_NAME,
+//   user: DB_USER,
+//   password: DB_PASSWORD,
+//   max: 30, // use up to 30 connections
+// };
 
 // Instantiate express and postgres
 const app = express();
-const db = pgp(dbConnectionConfig);
+// const db = pgp(dbConnectionConfig);
+const db = pgp(DB_URI);
 
 // Middleware
 app.use(express.json());
