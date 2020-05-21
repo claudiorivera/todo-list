@@ -1,3 +1,3 @@
-# express-app-template
+# todo-list
 
-A template for making an Express app.
+A simple to-do list, which was made for a homework assignment.
