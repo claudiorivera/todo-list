@@ -63,7 +63,7 @@ async function submitTask() {
     };
 
     // Send message and then refresh
-    const response = await fetch("/tasks", {
+    await fetch("/tasks", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -84,7 +84,7 @@ async function toggleComplete(clickEvent) {
   if (data.iscomplete === "true") {
     const message = { task_iscomplete: "false" };
     try {
-      const response = await fetch(`/tasks/${Number(data.id)}`, {
+      await fetch(`/tasks/${Number(data.id)}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -98,7 +98,7 @@ async function toggleComplete(clickEvent) {
   } else {
     const message = { task_iscomplete: "true" };
     try {
-      const response = await fetch(`/tasks/${Number(data.id)}`, {
+      await fetch(`/tasks/${Number(data.id)}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

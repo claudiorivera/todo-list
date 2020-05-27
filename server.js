@@ -32,7 +32,7 @@ app.get("/tasks", async (req, res) => {
 app.post("/tasks", async (req, res) => {
   try {
     const { task_description } = req.body;
-    const query = await db.none(
+    await db.none(
       "INSERT INTO tasks(task_description, task_iscomplete) VALUES($1, $2)",
       [task_description, false]
     );
@@ -47,10 +47,10 @@ app.put("/tasks/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const { task_iscomplete } = req.body;
-    const query = await db.query(
-      "UPDATE tasks SET task_iscomplete = $1 WHERE id = $2",
-      [task_iscomplete, id]
-    );
+    await db.query("UPDATE tasks SET task_iscomplete = $1 WHERE id = $2", [
+      task_iscomplete,
+      id,
+    ]);
     res.status(200).send(`User modified with ID: ${id}`);
   } catch (err) {
     console.log(err);
@@ -61,7 +61,7 @@ app.put("/tasks/:id", async (req, res) => {
 app.delete("/tasks/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const query = await db.query("DELETE FROM tasks WHERE id = $1", id);
+    await db.query("DELETE FROM tasks WHERE id = $1", id);
     res.status(200).send(`User deleted with ID: ${id}`);
   } catch (err) {
     console.log(err);
