@@ -5,7 +5,7 @@ const path = require("path");
 const pgp = require("pg-promise")();
 
 // Environmental variables
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 const DB_URI = process.env.DB_URI;
 
 // Instantiate express and postgres
