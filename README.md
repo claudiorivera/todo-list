@@ -1,3 +1,11 @@
-# express-app-template
+# todo-list
 
-A template for making an Express app.
+A simple todo list.
+
+# Install
+
+`yarn`
+
+# Dev
+
+`yarn run dev`
