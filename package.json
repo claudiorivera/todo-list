@@ -5,9 +5,8 @@
   "homepage": "https://github.com/claudiorivera/todo-list",
   "main": "server.js",
   "scripts": {
-    "test": "jest",
     "start": "node server",
-    "dev": "nodemon server & browser-sync start --proxy 'localhost:5000' --files 'public'"
+    "dev": "nodemon server"
   },
   "repository": {
     "type": "git",
@@ -23,8 +22,6 @@
     "pg-promise": "^10.5.2"
   },
   "devDependencies": {
-    "browser-sync": "^2.26.7",
-    "jest": "^25.4.0",
     "nodemon": "^2.0.3"
   }
 }
